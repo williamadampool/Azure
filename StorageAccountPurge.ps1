@@ -1,24 +1,3 @@
-#Script Purpose: Used to remove old files from the storage accounts. 
-#Retention periods are set in the variables
-#Ignores all files that occur on the first day of the month.
-
-#Instructions: Deploy script onto automation Account
-#Create the following Variables in the Auatomation account
-<#
-        --Params for Transactional DB (e.g. BPT)
-        XXXX_StartDate #Number of days to look back from current day (e.g start 180 days back)h
-        XXXX_EndDate   #Number of days to look back from current day - use StartDate to calculate days outside the retention period
-        
-        --Params for Non-Transactional DB (e.g. BPA, EAI, BPM, BA3)
-        XXXX_StartDate_NonTransactional #Number of days to look back from current day (e.g start 180 days back)
-        XXXX_EndDate_NonTransactional   #Number of days to look back from current day - use StartDate to calculate days outside the retention period
-        
-        AccountKey_UpclearStorage1     #MAKE SURE THESE ARE ENCRYPTED!!!!
-        AccountKey_UpclearStorage1b    #MAKE SURE THESE ARE ENCRYPTED!!!!
-        AccountKey_UpclearStorage2 	   #MAKE SURE THESE ARE ENCRYPTED!!!!
-        AccountKey_UpclearStorage3 	   #MAKE SURE THESE ARE ENCRYPTED!!!!
-#>
-
 #throw the error to the caller (if any)
 $errorActionPreference = "Stop" 
 
@@ -30,21 +9,13 @@ $EndDateLocalInt                            =  Get-AutomationVariable   -Name Pr
 $StartDateNonTransactionalLocalInt          =  Get-AutomationVariable   -Name Prod_StartDate_NonTransactional #Number of days to look back from current day (e.g start 180 days back)
 $EndDateNonTransactionalLocalInt            =  Get-AutomationVariable   -Name Prod_EndDate_NonTransactional   #Number of days to look back from current day - use StartDate to calculate days outside the retention period
 
-$StorageAccountKeyLocalEnc_UpclearStorage1  =  Get-AutomationVariable   -Name AccountKey_UpclearStorage1 
-$StorageAccountKeyLocalEnc_UpclearStorage1b =  Get-AutomationVariable   -Name AccountKey_UpclearStorage1b 
-$StorageAccountKeyLocalEnc_UpclearStorage2  =  Get-AutomationVariable   -Name AccountKey_UpclearStorage2 
-$StorageAccountKeyLocalEnc_UpclearStorage3  =  Get-AutomationVariable   -Name AccountKey_UpclearStorage3 
-$StorageAccountNameLocal_UpclearStorage1    =  "upclearstorage1"
-$StorageAccountNameLocal_UpclearStorage1b   =  "upclearstorage1b" 
-$StorageAccountNameLocal_UpclearStorage2    =  "upclearstorage2"
-$StorageAccountNameLocal_UpclearStorage3    =  "upclearstorage3"
+$StorageAccount  =  Get-AutomationVariable   -Name AccountKey
 $ShareNameLocal                             =  "backup"
 $DirectoryPathLocal                         =  "prod"
 
 #DO NOT MODIFY BELOW!!
-#----------------------------------StorageAccountNameLocal_UpclearStorage1---------------------------------------------------#
 
-Write-Output "Starting Purge : $StorageAccountNameLocal_UpclearStorage1 "
+Write-Output "Starting Purge : $StorageAccoun "
 $StartDate = (get-date).AddDays($StartDateLocalInt) 
 $EndDate   = (get-date).AddDays($EndDateLocalInt) 
 
@@ -57,12 +28,12 @@ Write-Output "Transactional DB Retention Period End: $EndDate   "
 Write-Output "Non-Transactional DBRetention Period Start: $NonTranStartDate "
 Write-Output "Non-Transactional DBRetention Period End: $NonTranEndDate   "
 
-Write-Output "Storage Account Name: $StorageAccountNameLocal_UpclearStorage1"
+Write-Output "Storage Account Name: $StorageAccountNameLocal_ Storage1"
 Write-Output "Share Name: $ShareNameLocal "
 Write-Output "Share Name: $DirectoryPathLocal "
 
 "Connecting to Storage Account..."
-$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal_UpclearStorage1  -StorageAccountKey $StorageAccountKeyLocalEnc_UpclearStorage1 
+$ctx = New-AzStorageContext -StorageAccountName $StorageAccount  -StorageAccountKey $StorageAccountKeyLocalEnc_ Storage1 
 $shareName = $ShareNameLocal
 $directoryPath = $DirectoryPathLocal 
 $DirIndex = 0
@@ -133,12 +104,10 @@ while ($dirsToList.Count -gt $DirIndex)
     } 
 }
 Write-Output "Number of files removed $removedfilecount "
-Write-Output "Completed... $StorageAccountNameLocal_UpclearStorage1"
+Write-Output "Completed... $StorageAccountNameLocal_ Storage1"
 Write-Output "-----------------------------------------------------------" 
-#>
-#----------------------------------StorageAccountNameLocal_UpclearStorage1b---------------------------------------------------#
 
-Write-Output "Starting Purge : $StorageAccountNameLocal_UpclearStorage1b "
+Write-Output "Starting Purge : $StorageAccountNameLocal_ Storage1b "
 $StartDate = (get-date).AddDays($StartDateLocalInt) 
 $EndDate   = (get-date).AddDays($EndDateLocalInt) 
 
@@ -151,12 +120,12 @@ Write-Output "Transactional DB Retention Period End: $EndDate   "
 Write-Output "Non-Transactional DBRetention Period Start: $NonTranStartDate "
 Write-Output "Non-Transactional DBRetention Period End: $NonTranEndDate   "
 
-Write-Output "Storage Account Name: $StorageAccountNameLocal_UpclearStorage1b"
+Write-Output "Storage Account Name: $StorageAccountNameLocal_ Storage1b"
 Write-Output "Share Name: $ShareNameLocal "
 Write-Output "Share Name: $DirectoryPathLocal "
 
 "Connecting to Storage Account..."
-$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal_UpclearStorage1b  -StorageAccountKey $StorageAccountKeyLocalEnc_UpclearStorage1b 
+$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal_ Storage1b  -StorageAccountKey $StorageAccountKeyLocalEnc_ Storage1b 
 $shareName = $ShareNameLocal
 $directoryPath = $DirectoryPathLocal 
 $DirIndex = 0
@@ -228,12 +197,10 @@ while ($dirsToList.Count -gt $DirIndex)
 }
 
 Write-Output "Number of files removed $removedfilecount "
-Write-Output "Completed... $StorageAccountNameLocal_UpclearStorage1b"
+Write-Output "Completed... $StorageAccountNameLocal_ Storage1b"
 Write-Output "-----------------------------------------------------------" 
 
-
-#----------------------------------StorageAccountNameLocal_UpclearStorage2---------------------------------------------------#
-Write-Output "Starting Purge : $StorageAccountNameLocal_UpclearStorage2 "
+Write-Output "Starting Purge : $StorageAccountNameLocal_ Storage2 "
 $StartDate = (get-date).AddDays($StartDateLocalInt) 
 $EndDate   = (get-date).AddDays($EndDateLocalInt) 
 
@@ -246,12 +213,12 @@ Write-Output "Transactional DB Retention Period End: $EndDate   "
 Write-Output "Non-Transactional DBRetention Period Start: $NonTranStartDate "
 Write-Output "Non-Transactional DBRetention Period End: $NonTranEndDate   "
 
-Write-Output "Storage Account Name: $StorageAccountNameLocal_UpclearStorage2"
+Write-Output "Storage Account Name: $StorageAccountNameLocal_ Storage2"
 Write-Output "Share Name: $ShareNameLocal "
 Write-Output "Share Name: $DirectoryPathLocal "
 
 "Connecting to Storage Account..."
-$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal_UpclearStorage2  -StorageAccountKey $StorageAccountKeyLocalEnc_UpclearStorage2 
+$ctx = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccount
 $shareName = $ShareNameLocal
 $directoryPath = $DirectoryPathLocal 
 $DirIndex = 0
@@ -322,11 +289,10 @@ while ($dirsToList.Count -gt $DirIndex)
     } 
 }
 Write-Output "Number of files removed $removedfilecount "
-Write-Output "Completed... $StorageAccountNameLocal_UpclearStorage2"
+Write-Output "Completed... $StorageAccountNameLocal_ Storage2"
 Write-Output "-----------------------------------------------------------" 
 
-#----------------------------------StorageAccountNameLocal_UpclearStorage3---------------------------------------------------#
-Write-Output "Starting Purge : $StorageAccountNameLocal_UpclearStorage3 "
+Write-Output "Starting Purge : $StorageAccountNameLocal_ Storage3 "
 $StartDate = (get-date).AddDays($StartDateLocalInt) 
 $EndDate   = (get-date).AddDays($EndDateLocalInt) 
 
@@ -339,12 +305,12 @@ Write-Output "Transactional DB Retention Period End: $EndDate   "
 Write-Output "Non-Transactional DBRetention Period Start: $NonTranStartDate "
 Write-Output "Non-Transactional DBRetention Period End: $NonTranEndDate   "
 
-Write-Output "Storage Account Name: $StorageAccountNameLocal_UpclearStorage3"
+Write-Output "Storage Account Name: $StorageAccountNameLocal_ Storage3"
 Write-Output "Share Name: $ShareNameLocal "
 Write-Output "Share Name: $DirectoryPathLocal "
 
 "Connecting to Storage Account..."
-$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal_UpclearStorage3  -StorageAccountKey $StorageAccountKeyLocalEnc_UpclearStorage3 
+$ctx = New-AzStorageContext -StorageAccountName $StorageAccountNameLocal -StorageAccountKey $StorageAccount
 $shareName = $ShareNameLocal
 $directoryPath = $DirectoryPathLocal 
 $DirIndex = 0
@@ -415,5 +381,5 @@ while ($dirsToList.Count -gt $DirIndex)
     } 
 }
 Write-Output "Number of files removed $removedfilecount "
-Write-Output "Completed... $StorageAccountNameLocal_UpclearStorage3"
+Write-Output "Completed... $StorageAccountNameLocal"
 Write-Output "-----------------------------------------------------------" 
